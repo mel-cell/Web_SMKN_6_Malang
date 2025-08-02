@@ -1,21 +1,12 @@
-# Gunakan base image yang sudah memiliki Bun terpasang
-FROM oven/bun:1.0
+FROM node:18-alpine
 
-# Tetapkan working directory
 WORKDIR /app
 
-# Copy package.json dan bun.lockb (Bun's lock file)
-COPY package.json bun.lockb ./
+COPY package*.json ./
+RUN npm install
 
-# Install dependencies menggunakan Bun
-RUN bun install --frozen-lockfile
-
-# Copy semua file ke working directory
 COPY . .
 
-# Exposure port yang digunakan oleh Hono
-EXPOSE 3001
+EXPOSE 3002
 
-# Jalankan aplikasi Hono menggunakan Bun
-# Asumsi file entry point kamu bernama `index.js`
-CMD ["bun", "run", "src/index.ts"]
+CMD ["node", "server.js"]
